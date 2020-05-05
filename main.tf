@@ -18,6 +18,16 @@ resource "aws_vpc" "wp_vpc" {
   enable_dns_support   = true
 
   tags = {
-    Name = "wp_vpc"
+    Name = "${var.stackname}_VPC"
+  }
+}
+
+# Internet gateway
+
+resource "aws_internet_gateway" "wp_internet_gateway" {
+  vpc_id = aws_vpc.wp_vpc.id
+
+  tags = {
+    Name = "${var.stackname}_IGW"
   }
 }
