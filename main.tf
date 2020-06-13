@@ -9,6 +9,7 @@ provider "aws" {
 
 # --------  IAM  --------
 
+## Creates IAM account to place EC2 instance inside. Currently unused.
 resource "aws_iam_user" "iam_user" {
   name = var.stackname
   path = "/system/"
@@ -111,7 +112,44 @@ resource "aws_subnet" "wp_rds3_subnet" {
   }
 }
 
-#-------- Security groups --------
+
+###### rds subnet group ########################################################################
+
+resource "aws_db_subnet_group" "wp_rds_subnetgroup" {
+  name = "wp_rds_subnetgroup"
+
+  subnet_ids = [aws_subnet.wp_rds1_subnet.id,
+    aws_subnet.wp_rds2_subnet.id,
+    aws_subnet.wp_rds3_subnet.id,
+  ]
+
+
+}
+
+
+
+
+
+
+
+
+
+
+# -------- Route Table Associations --------
+
+resource "aws_route_table_association" "wp_public1_assoc" {
+  subnet_id      = aws_subnet.wp_public1_subnet.id
+  route_table_id = aws_route_table.wp_public_rt.id
+}
+
+resource "aws_route_table_association" "wp_public2_assoc" {
+  subnet_id      = aws_subnet.wp_public2_subnet.id
+  route_table_id = aws_route_table.wp_public_rt.id
+}
+
+
+
+# -------- Security groups --------
 
 ## Security group for EC2 instances
 
@@ -179,15 +217,36 @@ resource "aws_security_group" "wp_rds_sg" {
 }
 
 
-#################################################################### EC2 ###
+# --------  EC2  --------
 
-#resource "aws_instance" "web" {
-#  instance_type = "t2.micro"
-#  ami           = var.web_ami
-#
-#  key_name               = var.ec2_key_pair
-#  subnet_id              = aws_subnet.wp_public1_subnet.id
-#  security_groups        = [(aws_security_group.wp_ec2_sg.id)]
-#
-#
-#  }
+resource "aws_instance" "web" {
+  instance_type = var.web_instance_type
+  ami           = var.web_ami
+  key_name               = var.ec2_key_pair
+  subnet_id              = aws_subnet.wp_public1_subnet.id
+  security_groups        = [(aws_security_group.wp_ec2_sg.id)]
+  
+
+  }
+
+
+
+# --------  RDS  --------
+
+  resource "aws_db_instance" "wp_db" {
+    allocated_storage           = var.db_allocated_storage
+    allow_major_version_upgrade = false
+    auto_minor_version_upgrade  = true
+    backup_retention_period     = 7
+    delete_automated_backups    = true
+    engine                      = var.db_engine
+    identifier                  = var.stackname
+    instance_class              = var.db_instance_class
+    max_allocated_storage       = 0
+    name                        = var.dbname
+    username                    = var.dbname
+    password                    = var.dbpassword
+    db_subnet_group_name        = aws_db_subnet_group.wp_rds_subnetgroup.name
+    vpc_security_group_ids      = ["${aws_security_group.wp_rds_sg.id}"]
+    skip_final_snapshot         = true
+  }
