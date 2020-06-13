@@ -223,21 +223,20 @@ resource "aws_instance" "web" {
 
 
 # --------  RDS  --------
-
-#  resource "aws_db_instance" "wp_db" {
-#    allocated_storage           = var.db_allocated_storage
-#    allow_major_version_upgrade = false
-#    auto_minor_version_upgrade  = true
-#    backup_retention_period     = 7
-#    delete_automated_backups    = true
-#    engine                      = var.db_engine
-#    identifier                  = var.stackname
-#    instance_class              = var.db_instance_class
-#    max_allocated_storage       = 0
-#    name                        = var.dbname
-#    username                    = var.dbname
-#    password                    = var.dbpassword
-#    db_subnet_group_name        = aws_db_subnet_group.wp_rds_subnetgroup.name
-#    vpc_security_group_ids      = ["${aws_security_group.wp_rds_sg.id}"]
-#    skip_final_snapshot         = true
-#  }
+ resource "aws_db_instance" "wp_db" {
+    allocated_storage           = var.db_allocated_storage
+    allow_major_version_upgrade = false
+    auto_minor_version_upgrade  = true
+    backup_retention_period     = 7
+    delete_automated_backups    = true
+    engine                      = var.db_engine
+    identifier                  = var.stackname
+    instance_class              = var.db_instance_class
+    max_allocated_storage       = 0
+    name                        = var.dbname
+    username                    = var.dbname
+    password                    = var.dbpassword
+    db_subnet_group_name        = aws_db_subnet_group.wp_rds_subnetgroup.name
+    vpc_security_group_ids      = ["${aws_security_group.wp_rds_sg.id}"]
+    skip_final_snapshot         = true
+  }

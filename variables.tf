@@ -15,7 +15,6 @@ variable "ec2_storage"{}
 
 variable "db_allocated_storage"{}
 variable "db_engine"{}
-variable "db_engine_version"{}
 variable "db_instance_class"{}
 variable "dbname" {}
 variable "dbuser" {}
