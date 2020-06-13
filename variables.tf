@@ -11,6 +11,8 @@ variable "stackname"{}
 variable "web_instance_type"{}
 variable "web_ami"{}
 variable "ec2_key_pair"{}
+variable "ec2_storage"{}
+
 variable "db_allocated_storage"{}
 variable "db_engine"{}
 variable "db_engine_version"{}

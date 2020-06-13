@@ -39,7 +39,8 @@ resource "aws_internet_gateway" "wp_internet_gateway" {
   }
 }
 
-############################################################ Route tables ####
+
+# --------  Route Table  --------
 
 resource "aws_route_table" "wp_public_rt" {
   vpc_id = aws_vpc.wp_vpc.id
@@ -54,7 +55,7 @@ resource "aws_route_table" "wp_public_rt" {
   }
 }
 
-##############################################################  Subnets  ####
+# --------  Subnets  --------
 
 resource "aws_subnet" "wp_public1_subnet" {
   vpc_id                  = aws_vpc.wp_vpc.id
@@ -113,7 +114,7 @@ resource "aws_subnet" "wp_rds3_subnet" {
 }
 
 
-###### rds subnet group ########################################################################
+# --------  RDS subnet group  --------
 
 resource "aws_db_subnet_group" "wp_rds_subnetgroup" {
   name = "wp_rds_subnetgroup"
@@ -125,14 +126,6 @@ resource "aws_db_subnet_group" "wp_rds_subnetgroup" {
 
 
 }
-
-
-
-
-
-
-
-
 
 
 # -------- Route Table Associations --------
@@ -148,10 +141,9 @@ resource "aws_route_table_association" "wp_public2_assoc" {
 }
 
 
-
 # -------- Security groups --------
 
-## Security group for EC2 instances
+# --- EC2 ---
 
 resource "aws_security_group" "wp_ec2_sg" {
   name        = "wp_ec2_sg"
@@ -191,8 +183,7 @@ resource "aws_security_group" "wp_ec2_sg" {
   }
 }
 
-
-## Security group for RDS instances
+# --- RDS ---
 
 resource "aws_security_group" "wp_rds_sg" {
   name        = "wp_rds_sg"
@@ -225,28 +216,28 @@ resource "aws_instance" "web" {
   key_name               = var.ec2_key_pair
   subnet_id              = aws_subnet.wp_public1_subnet.id
   security_groups        = [(aws_security_group.wp_ec2_sg.id)]
-  
-
+  root_block_device {
+    volume_size           = var.ec2_storage
+    }
   }
-
 
 
 # --------  RDS  --------
 
-  resource "aws_db_instance" "wp_db" {
-    allocated_storage           = var.db_allocated_storage
-    allow_major_version_upgrade = false
-    auto_minor_version_upgrade  = true
-    backup_retention_period     = 7
-    delete_automated_backups    = true
-    engine                      = var.db_engine
-    identifier                  = var.stackname
-    instance_class              = var.db_instance_class
-    max_allocated_storage       = 0
-    name                        = var.dbname
-    username                    = var.dbname
-    password                    = var.dbpassword
-    db_subnet_group_name        = aws_db_subnet_group.wp_rds_subnetgroup.name
-    vpc_security_group_ids      = ["${aws_security_group.wp_rds_sg.id}"]
-    skip_final_snapshot         = true
-  }
+#  resource "aws_db_instance" "wp_db" {
+#    allocated_storage           = var.db_allocated_storage
+#    allow_major_version_upgrade = false
+#    auto_minor_version_upgrade  = true
+#    backup_retention_period     = 7
+#    delete_automated_backups    = true
+#    engine                      = var.db_engine
+#    identifier                  = var.stackname
+#    instance_class              = var.db_instance_class
+#    max_allocated_storage       = 0
+#    name                        = var.dbname
+#    username                    = var.dbname
+#    password                    = var.dbpassword
+#    db_subnet_group_name        = aws_db_subnet_group.wp_rds_subnetgroup.name
+#    vpc_security_group_ids      = ["${aws_security_group.wp_rds_sg.id}"]
+#    skip_final_snapshot         = true
+#  }
