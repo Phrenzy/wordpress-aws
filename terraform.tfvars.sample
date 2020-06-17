@@ -1,0 +1,26 @@
+aws_profile = "profile"
+aws_region  = "us-west-2"
+vpc_cidr    = "10.0.0.0/16"
+cidrs       = {
+  public1   = "10.0.1.0/24"
+  public2   = "10.0.2.0/24"
+  rds1      = "10.0.11.0/24"
+  rds2      = "10.0.12.0/24"
+  rds3      = "10.0.13.0/24"
+}
+stackname = "stackname"
+
+# ------ ec2 ------
+web_instance_type = "t2.micro"
+web_ami = "ami-003634241a8fcdec0"
+ec2_key_pair = "ec2-key-pair"
+ec2_storage = "30"
+
+# ------ database ------
+
+db_instance_class = "db.t2.micro"
+dbname = "dbname"
+dbuser = "dbuser"
+dbpassword = "password"
+db_allocated_storage = 20
+db_engine = "mariadb"
