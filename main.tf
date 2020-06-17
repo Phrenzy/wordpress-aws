@@ -222,9 +222,22 @@ resource "aws_instance" "web" {
   tags = {
       Name = var.stackname
     }
+
+
+
+    provisioner "local-exec" {
+      command = <<EOD
+  cat <<EOF > aws_hosts
+  [web]
+  ${aws_instance.web.public_ip}
+  EOD
+    }
+    provisioner "local-exec" {
+      command = "aws ec2 wait instance-status-ok --instance-ids ${aws_instance.web.id} && ansible-playbook -i aws_hosts wordpress.yml"
+    }
   }
 
-
+/*
 # --------  RDS  --------
  resource "aws_db_instance" "wp_db" {
     allocated_storage           = var.db_allocated_storage
@@ -243,3 +256,4 @@ resource "aws_instance" "web" {
     vpc_security_group_ids      = ["${aws_security_group.wp_rds_sg.id}"]
     skip_final_snapshot         = true
   }
+  */
