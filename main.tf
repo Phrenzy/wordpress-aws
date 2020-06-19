@@ -237,8 +237,9 @@ resource "aws_instance" "web" {
     }
   }
 
-/*
+
 # --------  RDS  --------
+
  resource "aws_db_instance" "wp_db" {
     allocated_storage           = var.db_allocated_storage
     allow_major_version_upgrade = false
@@ -256,4 +257,3 @@ resource "aws_instance" "web" {
     vpc_security_group_ids      = ["${aws_security_group.wp_rds_sg.id}"]
     skip_final_snapshot         = true
   }
-  */
