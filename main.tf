@@ -230,6 +230,8 @@ resource "aws_instance" "web" {
   cat <<EOF > aws_hosts
   [web]
   ${aws_instance.web.public_ip}
+  [web:vars]
+  ansible_python_interpreter=/usr/bin/python3
   EOD
     }
     provisioner "local-exec" {
