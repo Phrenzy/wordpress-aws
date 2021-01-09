@@ -1,7 +1,7 @@
-aws_hosts
-terraform.tfvars
 .terraform
-terraform.tfstate
-terraform.tfstate.backup
 .terraform.lock.hcl
 .terraform.tfstate.lock.info
+aws_hosts
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars

@@ -1,5 +1,5 @@
 #
-# Written for Terraform v0.12.24
+# Written for Terraform v0.14.3
 
 provider "aws" {
   region  = var.aws_region
@@ -10,10 +10,10 @@ provider "aws" {
 # --------  IAM  --------
 
 ## Creates IAM account to place EC2 instance inside. Currently unused.
-resource "aws_iam_user" "iam_user" {
-  name = var.stackname
-  path = "/system/"
-}
+#resource "aws_iam_user" "iam_user" {
+#  name = var.stackname
+#  path = "/system/"
+#}
 
 
 # --------  VPC  --------
@@ -256,6 +256,6 @@ resource "aws_instance" "web" {
     username                    = var.dbuser
     password                    = var.dbpassword
     db_subnet_group_name        = aws_db_subnet_group.wp_rds_subnetgroup.name
-    vpc_security_group_ids      = ["${aws_security_group.wp_rds_sg.id}"]
+    vpc_security_group_ids      = [aws_security_group.wp_rds_sg.id]
     skip_final_snapshot         = true
   }

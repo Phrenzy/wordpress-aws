@@ -1,5 +1,7 @@
 variable "aws_region" {}
 variable "aws_profile" {}
+variable "aws_access" {}
+variable "aws_secret_key" {}
 #variable "localip" {}
 data "aws_availability_zones" "available" {}
 variable "vpc_cidr" {}
